@@ -3,7 +3,7 @@ from routers.auth_routers import auth_router
 from routers.produtos_routers import produtos_router
 from database import engine, Base
 from routers.movimentacoes_routers import movimentacoes_router
-from relatorio_routers import relatorio_router
+from routers.relatorio_routers import relatorio_router
 
 app = FastAPI()
 

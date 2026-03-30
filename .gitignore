@@ -1,0 +1,16 @@
+# venv
+venv/
+
+# banco de dados
+*.db
+
+# variáveis de ambiente
+.env
+
+# arquivos gerados pelo Python
+__pycache__/
+*.pyc
+
+# relatórios gerados
+*.xlsx
+*.csv

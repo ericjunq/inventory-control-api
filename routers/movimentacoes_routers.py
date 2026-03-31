@@ -7,7 +7,7 @@ from security import get_current_user
 from enums import MovimentacoesEnum
 from typing import Union
 
-movimentacoes_router = APIRouter()
+movimentacoes_router = APIRouter(prefix='/movimentacoes', tags=['movimentacoes'])
 
 @movimentacoes_router.post('/movimentar_estoque/{produto_id}', response_model=Union[MovimentacoesResponse, MovimentacoesComAviso])
 async def movimentar_estoque(

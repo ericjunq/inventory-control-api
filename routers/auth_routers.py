@@ -1,4 +1,4 @@
-from schemas import UsuarioUpdateResponse, UsuarioSchema, UsuarioUpdate, UsuarioCreateResponse
+from schemas import UsuarioUpdateResponse, UsuarioSchema, UsuarioUpdate, UsuarioCreateResponse, RefreshTokenInput
 from models import Usuario
 from dependencies import get_db
 from fastapi import Depends, HTTPException, APIRouter
@@ -6,6 +6,8 @@ from sqlalchemy.orm import Session
 from validations import validar_telefone, validate_cpf
 from security import verificar_senha, criptografar_senha, criar_access_token, criar_refresh_token, get_current_user
 from fastapi.security import OAuth2PasswordRequestForm
+from jose import jwt, JWTError
+from database import settings
 
 auth_router = APIRouter(prefix='/users', tags=['users'])
 
@@ -110,3 +112,38 @@ async def editar_usuario(
     db.refresh(usuario)
 
     return usuario
+
+
+@auth_router.post('/refresh_token')
+async def token_refresh(data: RefreshTokenInput, db: Session = Depends(get_db)):
+    try:
+        payload = jwt.decode(
+            data.token,
+            settings.secret_key,
+            algorithms=[settings.algorithm]
+        )
+
+        if payload.get('type') != 'refresh':
+            raise HTTPException(status_code=401, detail='Token inválido')
+        
+        email = payload.get('sub')
+        if email is None:
+            raise HTTPException(status_code=401, detail='Token inválido')
+    
+    except JWTError:
+        raise HTTPException(status_code=401, detail='Token inválido')
+    
+    usuario = db.query(Usuario).filter(Usuario.email == email).first()
+    if usuario is None:
+        raise HTTPException(status_code=401, detail='Usuário não encontrado')
+    
+    novo_access_token = criar_access_token(
+        dados={'sub': email, 'type': 'access'}
+    )
+    
+    return {
+        'access_token': novo_access_token,
+        'type': 'bearer'
+        }
+        
+    

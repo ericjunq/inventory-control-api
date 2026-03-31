@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # venv
 venv/
 
@@ -14,3 +15,21 @@ __pycache__/
 # relatórios gerados
 *.xlsx
 *.csv
+=======
+# venv
+venv/
+
+# banco de dados
+*.db
+
+# variáveis de ambiente
+.env
+
+# arquivos gerados pelo Python
+__pycache__/
+*.pyc
+
+# relatórios gerados
+*.xlsx
+*.csv
+>>>>>>> 8635e9f (a)

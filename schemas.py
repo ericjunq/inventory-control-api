@@ -102,3 +102,8 @@ class MovimentacoesComAviso(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+# Refresh Token
+class RefreshTokenInput(BaseModel):
+    token: str 
